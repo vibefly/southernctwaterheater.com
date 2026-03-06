@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "title": "Service Business | Local Service Specialist",
+    "description": "Professional service for your home or business. Licensed and insured. Call for a free estimate."
+  },
+  "theme": {
+    "bg": "#ffffff",
+    "bgAlt": "#f5f7fa",
+    "bgDark": "#1a1a2e",
+    "accentPrimary": "#4A90D9",
+    "accentSecondary": "#3A7BC8",
+    "accentLight": "#e8f0fe",
+    "textPrimary": "#333333",
+    "textSecondary": "#666666",
+    "heroStart": "#1a3a5c",
+    "heroMid": "#2a6496",
+    "heroEnd": "#4A90D9",
+    "star": "#f5a623"
+  },
+  "logo": {
+    "name": "Service Business",
+    "tld": ""
+  },
+  "nav": [
+    { "label": "Services", "href": "#services" },
+    { "label": "About", "href": "#about" },
+    { "label": "Reviews", "href": "#reviews" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Service Business",
+    "phone": "(000) 555-0000",
+    "phoneHref": "tel:+10005550000",
+    "email": "info@example.com",
+    "address": "Local Service Area",
+    "year": "2026"
+  },
+  "hero": {
+    "label": "Licensed & Insured Specialist",
+    "title": "YOUR LOCAL SERVICE PROFESSIONAL",
+    "subtext": "Professional service you can trust. Same-day service available.",
+    "ctaText": "Call Now",
+    "ctaHref": "#",
+    "ctaSecondaryText": "Get A Quote",
+    "ctaSecondaryHref": "#contact"
+  },
+  "pages": {
+    "home": {
+      "sections": [
+        {
+          "id": "services",
+          "label": "What We Do",
+          "heading": "OUR SERVICES",
+          "subheading": "Professional solutions for your home or business.",
+          "items": [
+            {
+              "icon": "wrench",
+              "title": "Service One",
+              "text": "Description of our first service offering. We handle this with expertise and care."
+            },
+            {
+              "icon": "settings",
+              "title": "Service Two",
+              "text": "Description of our second service offering. Fast, reliable, and done right the first time."
+            },
+            {
+              "icon": "refresh-cw",
+              "title": "Service Three",
+              "text": "Description of our third service offering. We help you choose the right solution."
+            },
+            {
+              "icon": "flame",
+              "title": "Service Four",
+              "text": "Description of our fourth service offering. Quality work at a fair price."
+            },
+            {
+              "icon": "clock",
+              "title": "Emergency Service",
+              "text": "Can't wait? We offer fast response for urgent issues. Call us anytime."
+            }
+          ]
+        },
+        {
+          "id": "about",
+          "label": "Why Choose Us",
+          "heading": "THE EXPERTS",
+          "subheading": "We specialize so you get the best results.",
+          "items": [
+            {
+              "icon": "shield-check",
+              "title": "Licensed & Insured",
+              "text": "Fully licensed and insured for your peace of mind. Our work meets all local codes."
+            },
+            {
+              "icon": "timer",
+              "title": "Same-Day Service",
+              "text": "Problems can't wait. We offer same-day service so you're never left without help."
+            },
+            {
+              "icon": "file-text",
+              "title": "Upfront Pricing",
+              "text": "No surprises. We provide a clear quote before any work begins."
+            },
+            {
+              "icon": "award",
+              "title": "Specialists",
+              "text": "We specialize in what we do. That focus means faster diagnosis and better results."
+            }
+          ]
+        },
+        {
+          "id": "reviews",
+          "label": "Testimonials",
+          "heading": "WHAT OUR CUSTOMERS SAY",
+          "subheading": "",
+          "items": [
+            {
+              "quote": "Excellent service from start to finish. They were on time, professional, and fixed the problem quickly. Highly recommend.",
+              "author": "Mike R.",
+              "role": "Local Customer",
+              "stars": 5
+            },
+            {
+              "quote": "Very impressed with the quality of work. Honest and upfront about pricing. No hidden fees, no pressure.",
+              "author": "Sarah T.",
+              "role": "Local Customer",
+              "stars": 5
+            },
+            {
+              "quote": "Called in the morning and they were there by noon. Same-day service and everything was done perfectly.",
+              "author": "James L.",
+              "role": "Local Customer",
+              "stars": 5
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "contact": {
+    "heading": "CONTACT US",
+    "subheading": "Get in touch for a free estimate or to schedule service.",
+    "hours": [
+      "Mon\u2013Fri: 7am \u2013 6pm",
+      "Sat: 8am \u2013 2pm",
+      "Emergency service available 24/7"
+    ],
+    "serviceAreas": [
+      "Local Area", "Nearby Town", "Surrounding Region"
+    ]
+  },
+  "form": {
+    "fields": [
+      { "type": "text",     "name": "name",    "label": "Name",           "placeholder": "Your name",             "required": true },
+      { "type": "tel",      "name": "phone",   "label": "Phone",          "placeholder": "(555) 000-0000",        "required": false },
+      { "type": "email",    "name": "email",   "label": "Email",          "placeholder": "you@example.com",       "required": true },
+      { "type": "textarea", "name": "message", "label": "Message",        "placeholder": "Tell us about your project...", "required": true, "rows": 4 }
+    ],
+    "submitLabel": "Send Message",
+    "turnstileSiteKey": "",
+    "statusMessages": [
+      "Sending your message\u2026",
+      "Reaching our team\u2026",
+      "Routing your request\u2026",
+      "Almost there\u2026",
+      "Checking the details\u2026",
+      "Warming things up\u2026"
+    ],
+    "deliveredMessage": "Message delivered!",
+    "thankYouHeading": "Thank You",
+    "thankYouMessage": "We received your message and will be in touch shortly.",
+    "thankYouSubtext": "For immediate assistance, call us at",
+    "errorMessage": "Something went wrong. Please try again or call us directly."
+  },
+  "footer": {
+    "about": "Your local service professional. Licensed and insured, serving homeowners in the local area.",
+    "copyright": "\u00a9 2026 Service Business. All rights reserved."
+  }
+}
