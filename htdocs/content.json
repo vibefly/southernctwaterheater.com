@@ -22,10 +22,22 @@
     "tld": ""
   },
   "nav": [
-    { "label": "Services", "href": "#services" },
-    { "label": "About", "href": "#about" },
-    { "label": "Reviews", "href": "#reviews" },
-    { "label": "Contact", "href": "#contact" }
+    {
+      "label": "Services",
+      "href": "#services"
+    },
+    {
+      "label": "About",
+      "href": "#about"
+    },
+    {
+      "label": "Reviews",
+      "href": "#reviews"
+    },
+    {
+      "label": "Contact",
+      "href": "#contact"
+    }
   ],
   "business": {
     "name": "Service Business",
@@ -141,30 +153,57 @@
     "heading": "CONTACT US",
     "subheading": "Get in touch for a free estimate or to schedule service.",
     "hours": [
-      "Mon\u2013Fri: 7am \u2013 6pm",
-      "Sat: 8am \u2013 2pm",
+      "Mon–Fri: 7am – 6pm",
+      "Sat: 8am – 2pm",
       "Emergency service available 24/7"
     ],
     "serviceAreas": [
-      "Local Area", "Nearby Town", "Surrounding Region"
+      "Local Area",
+      "Nearby Town",
+      "Surrounding Region"
     ]
   },
   "form": {
     "fields": [
-      { "type": "text",     "name": "name",    "label": "Name",           "placeholder": "Your name",             "required": true },
-      { "type": "tel",      "name": "phone",   "label": "Phone",          "placeholder": "(555) 000-0000",        "required": false },
-      { "type": "email",    "name": "email",   "label": "Email",          "placeholder": "you@example.com",       "required": true },
-      { "type": "textarea", "name": "message", "label": "Message",        "placeholder": "Tell us about your project...", "required": true, "rows": 4 }
+      {
+        "type": "text",
+        "name": "name",
+        "label": "Name",
+        "placeholder": "Your name",
+        "required": true
+      },
+      {
+        "type": "tel",
+        "name": "phone",
+        "label": "Phone",
+        "placeholder": "(555) 000-0000",
+        "required": false
+      },
+      {
+        "type": "email",
+        "name": "email",
+        "label": "Email",
+        "placeholder": "you@example.com",
+        "required": true
+      },
+      {
+        "type": "textarea",
+        "name": "message",
+        "label": "Message",
+        "placeholder": "Tell us about your project...",
+        "required": true,
+        "rows": 4
+      }
     ],
     "submitLabel": "Send Message",
-    "turnstileSiteKey": "",
+    "turnstileSiteKey": "0x4AAAAAACngU7_o1z5YIpT3",
     "statusMessages": [
-      "Sending your message\u2026",
-      "Reaching our team\u2026",
-      "Routing your request\u2026",
-      "Almost there\u2026",
-      "Checking the details\u2026",
-      "Warming things up\u2026"
+      "Sending your message…",
+      "Reaching our team…",
+      "Routing your request…",
+      "Almost there…",
+      "Checking the details…",
+      "Warming things up…"
     ],
     "deliveredMessage": "Message delivered!",
     "thankYouHeading": "Thank You",
@@ -174,6 +213,6 @@
   },
   "footer": {
     "about": "Your local service professional. Licensed and insured, serving homeowners in the local area.",
-    "copyright": "\u00a9 2026 Service Business. All rights reserved."
+    "copyright": "© 2026 Service Business. All rights reserved."
   }
 }
