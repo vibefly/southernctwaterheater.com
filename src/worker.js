@@ -108,7 +108,6 @@ async function renderPage(env, url) {
             })
             .on('head', {
                 element(el) {
-                    if (themeCss) el.append(`<style>:root{${themeCss}}</style>`, { html: true });
                     el.append(inlineScripts, { html: true });
                 }
             })
