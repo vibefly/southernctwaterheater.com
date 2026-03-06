@@ -7,21 +7,21 @@ export default {
         }
 
         if (request.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
-            return renderPage(request, env, url);
+            return renderPage(env, url);
         }
 
         return env.ASSETS.fetch(request);
     }
 };
 
-async function renderPage(request, env, url) {
+async function renderPage(env, url) {
     try {
         const [htmlRes, contentRes] = await Promise.all([
-            env.ASSETS.fetch(new Request(request.url)),
+            env.ASSETS.fetch(new Request(url.href)),
             env.ASSETS.fetch(new Request(new URL('/content.json', url).href)),
         ]);
 
-        if (!htmlRes.ok || !contentRes.ok) return env.ASSETS.fetch(request);
+        if (!htmlRes.ok || !contentRes.ok) return env.ASSETS.fetch(new Request(url.href));
 
         const content = await contentRes.json();
         const biz = content.business || {};
@@ -187,6 +187,9 @@ async function renderPage(request, env, url) {
                 element(el) {
                     if (content.footer && content.footer.copyright) el.setInnerContent(content.footer.copyright);
                 }
+            })
+            .on('#content-fetch', {
+                element(el) { el.remove(); }
             });
 
         return rewriter.transform(new Response(htmlRes.body, {
@@ -195,7 +198,7 @@ async function renderPage(request, env, url) {
         }));
 
     } catch {
-        return env.ASSETS.fetch(request);
+        return env.ASSETS.fetch(new Request(url.href));
     }
 }
 
