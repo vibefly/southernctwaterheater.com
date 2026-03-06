@@ -39,7 +39,8 @@ async function injectMeta(request, env, url) {
 
         const out = html
             .replace(/<title>[^<]*<\/title>/, `<title>${escHtml(content?.meta?.title || content?.business?.name || '')}</title>`)
-            .replace(/(<meta name="description"[^>]*>)/, `<meta name="description" content="${description}">\n    ${ogTags}`);
+            .replace(/(<meta name="description"[^>]*>)/, `<meta name="description" content="${description}">\n    ${ogTags}`)
+            .replace('</head>', `<script>window.__CONTENT_DATA=${JSON.stringify(content)};</script>\n</head>`);
 
         return new Response(out, {
             status: 200,
