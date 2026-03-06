@@ -1,24 +1,24 @@
 {
   "meta": {
-    "title": "Service Business | Local Service Specialist",
-    "description": "Professional service for your home or business. Licensed and insured. Call for a free estimate."
+    "title": "Southern CT Water Heater | Water Heater & Tankless System Specialists",
+    "description": "Southern CT Water Heater serves the Greater Waterbury, CT area with 20 years of experience. Licensed plumbers specializing in water heater installation, repair, and tankless systems. 24/7 emergency service. BBB rated."
   },
   "theme": {
     "bg": "#ffffff",
     "bgAlt": "#f5f7fa",
-    "bgDark": "#1a1a2e",
+    "bgDark": "#1a3a5c",
     "accentPrimary": "#4A90D9",
-    "accentSecondary": "#3A7BC8",
+    "accentSecondary": "#4A90D9",
     "accentLight": "#e8f0fe",
     "textPrimary": "#333333",
     "textSecondary": "#666666",
     "heroStart": "#1a3a5c",
-    "heroMid": "#2a6496",
+    "heroMid": "#1e4f7a",
     "heroEnd": "#4A90D9",
     "star": "#f5a623"
   },
   "logo": {
-    "name": "Service Business",
+    "name": "Southern CT Water Heater",
     "tld": ""
   },
   "nav": [
@@ -40,20 +40,20 @@
     }
   ],
   "business": {
-    "name": "Service Business",
-    "phone": "(000) 555-0000",
-    "phoneHref": "tel:+10005550000",
-    "email": "info@example.com",
-    "address": "Local Service Area",
-    "year": "2026"
+    "name": "Southern CT Water Heater",
+    "phone": "(203) 555-7890",
+    "phoneHref": "tel:+12035557890",
+    "email": "emcweeney@gmail.com",
+    "address": "Greater Waterbury, CT",
+    "year": "2005"
   },
   "hero": {
-    "label": "Licensed & Insured Specialist",
-    "title": "YOUR LOCAL SERVICE PROFESSIONAL",
-    "subtext": "Professional service you can trust. Same-day service available.",
-    "ctaText": "Call Now",
-    "ctaHref": "#",
-    "ctaSecondaryText": "Get A Quote",
+    "label": "20 Years of Experience | BBB Rated | Licensed & Insured",
+    "title": "WATERBURY'S WATER HEATER SPECIALISTS",
+    "subtext": "Tank & tankless water heater installation, repair, and replacement — done right the same day. 24/7 emergency service available throughout Greater Waterbury, CT.",
+    "ctaText": "Call (203) 555-7890",
+    "ctaHref": "tel:+12035557890",
+    "ctaSecondaryText": "Get A Free Estimate",
     "ctaSecondaryHref": "#contact"
   },
   "pages": {
@@ -63,60 +63,65 @@
           "id": "services",
           "label": "What We Do",
           "heading": "OUR SERVICES",
-          "subheading": "Professional solutions for your home or business.",
+          "subheading": "From traditional tank water heaters to modern on-demand tankless systems, we handle every hot water need for homes and businesses in the Greater Waterbury area.",
           "items": [
             {
-              "icon": "wrench",
-              "title": "Service One",
-              "text": "Description of our first service offering. We handle this with expertise and care."
-            },
-            {
-              "icon": "settings",
-              "title": "Service Two",
-              "text": "Description of our second service offering. Fast, reliable, and done right the first time."
+              "icon": "flame",
+              "title": "Water Heater Installation",
+              "text": "Professional installation of gas, electric, and oil-fired tank water heaters. We carry top brands and size the right unit for your household or business needs."
             },
             {
               "icon": "refresh-cw",
-              "title": "Service Three",
-              "text": "Description of our third service offering. We help you choose the right solution."
+              "title": "Water Heater Replacement",
+              "text": "Is your water heater aging out or beyond repair? We'll remove your old unit and install a new one efficiently — often the same day you call."
             },
             {
-              "icon": "flame",
-              "title": "Service Four",
-              "text": "Description of our fourth service offering. Quality work at a fair price."
+              "icon": "wrench",
+              "title": "Water Heater Repair",
+              "text": "No hot water, strange noises, or leaks? Our licensed plumbers diagnose and fix all water heater problems quickly to restore your hot water fast."
+            },
+            {
+              "icon": "zap",
+              "title": "Tankless Water Heater Systems",
+              "text": "On-demand tankless systems deliver endless hot water and can cut energy costs by up to 40%. We install and service all major tankless brands."
+            },
+            {
+              "icon": "settings",
+              "title": "Tankless System Service & Repair",
+              "text": "Keep your tankless system running at peak efficiency with routine descaling, maintenance, and expert repairs by certified technicians."
             },
             {
               "icon": "clock",
-              "title": "Emergency Service",
-              "text": "Can't wait? We offer fast response for urgent issues. Call us anytime."
+              "title": "24/7 Emergency Service",
+              "text": "A failed water heater can't wait. We offer around-the-clock emergency response throughout Greater Waterbury so you're never left in the cold."
             }
           ]
         },
         {
           "id": "about",
           "label": "Why Choose Us",
-          "heading": "THE EXPERTS",
-          "subheading": "We specialize so you get the best results.",
+          "heading": "THE SOUTHERN CT WATER HEATER DIFFERENCE",
+          "subheading": "With two decades of experience and a focus on water heaters, we deliver faster, better results than a general plumber.",
           "items": [
+            {
+              "icon": "award",
+              "title": "BBB Accredited",
+              "text": "We're proud of our strong BBB rating — a reflection of our commitment to honest work, fair pricing, and customer satisfaction on every job."
+            },
             {
               "icon": "shield-check",
               "title": "Licensed & Insured",
-              "text": "Fully licensed and insured for your peace of mind. Our work meets all local codes."
+              "text": "Fully licensed plumbers and fully insured for your protection. All work meets Connecticut state code and manufacturer specifications."
             },
             {
               "icon": "timer",
-              "title": "Same-Day Service",
-              "text": "Problems can't wait. We offer same-day service so you're never left without help."
+              "title": "Same-Day & Emergency Service",
+              "text": "Hot water emergencies don't follow business hours. We're available 24/7 and respond quickly to get your hot water running again."
             },
             {
               "icon": "file-text",
-              "title": "Upfront Pricing",
-              "text": "No surprises. We provide a clear quote before any work begins."
-            },
-            {
-              "icon": "award",
-              "title": "Specialists",
-              "text": "We specialize in what we do. That focus means faster diagnosis and better results."
+              "title": "Upfront, Honest Pricing",
+              "text": "We provide clear, written estimates before any work begins. No surprise charges, no hidden fees — just straightforward pricing you can trust."
             }
           ]
         },
@@ -127,21 +132,21 @@
           "subheading": "",
           "items": [
             {
-              "quote": "Excellent service from start to finish. They were on time, professional, and fixed the problem quickly. Highly recommend.",
-              "author": "Mike R.",
-              "role": "Local Customer",
+              "quote": "Called Southern CT Water Heater at 7am when we woke up to no hot water. They were at my house in Waterbury by 10am and had a new water heater installed by noon. Incredible service and very fair price.",
+              "author": "Tom B.",
+              "role": "Waterbury, CT",
               "stars": 5
             },
             {
-              "quote": "Very impressed with the quality of work. Honest and upfront about pricing. No hidden fees, no pressure.",
-              "author": "Sarah T.",
-              "role": "Local Customer",
+              "quote": "These guys know water heaters inside and out. They recommended a tankless system for our home and the installation was flawless. Our energy bills have noticeably dropped. Highly recommend.",
+              "author": "Lisa M.",
+              "role": "Naugatuck, CT",
               "stars": 5
             },
             {
-              "quote": "Called in the morning and they were there by noon. Same-day service and everything was done perfectly.",
-              "author": "James L.",
-              "role": "Local Customer",
+              "quote": "I've used Southern CT Water Heater twice now. Both times they were professional, on time, and did exactly what they said they'd do at the price they quoted. You won't find better in the area.",
+              "author": "Dave K.",
+              "role": "Middlebury, CT",
               "stars": 5
             }
           ]
@@ -151,16 +156,21 @@
   },
   "contact": {
     "heading": "CONTACT US",
-    "subheading": "Get in touch for a free estimate or to schedule service.",
+    "subheading": "Call or fill out the form for a free estimate on water heater installation, replacement, or repair. We serve all of Greater Waterbury, CT.",
     "hours": [
       "Mon–Fri: 7am – 6pm",
-      "Sat: 8am – 2pm",
-      "Emergency service available 24/7"
+      "Sat: 8am – 3pm",
+      "24/7 Emergency Service Available"
     ],
     "serviceAreas": [
-      "Local Area",
-      "Nearby Town",
-      "Surrounding Region"
+      "Waterbury",
+      "Naugatuck",
+      "Ansonia",
+      "Derby",
+      "Shelton",
+      "Middlebury",
+      "Wolcott",
+      "Southbury"
     ]
   },
   "form": {
@@ -176,7 +186,7 @@
         "type": "tel",
         "name": "phone",
         "label": "Phone",
-        "placeholder": "(555) 000-0000",
+        "placeholder": "(203) 000-0000",
         "required": false
       },
       {
@@ -190,7 +200,7 @@
         "type": "textarea",
         "name": "message",
         "label": "Message",
-        "placeholder": "Tell us about your project...",
+        "placeholder": "Tell us about your water heater issue or project — type of unit, age, symptoms, etc.",
         "required": true,
         "rows": 4
       }
@@ -212,7 +222,7 @@
     "errorMessage": "Something went wrong. Please try again or call us directly."
   },
   "footer": {
-    "about": "Your local service professional. Licensed and insured, serving homeowners in the local area.",
-    "copyright": "© 2026 Service Business. All rights reserved."
+    "about": "Southern CT Water Heater is Greater Waterbury's trusted water heater specialist. With 20 years of experience, we install, replace, and repair tank and tankless hot water systems for homes and businesses throughout Connecticut.",
+    "copyright": "© 2025 Southern CT Water Heater. All rights reserved."
   }
 }
