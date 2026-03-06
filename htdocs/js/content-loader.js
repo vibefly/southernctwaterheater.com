@@ -341,7 +341,7 @@
             formEl.insertBefore(tsContainer, submitBtn);
             var tsTheme = 'light';
             if (data.theme && (data.theme.bgDark || data.theme.bg)) {
-                var hex = (data.theme.bgDark || data.theme.bg).replace('#', '');
+                var hex = (data.theme.bg || data.theme.bgDark).replace('#', '');
                 var r = parseInt(hex.substring(0, 2), 16) / 255;
                 var g = parseInt(hex.substring(2, 4), 16) / 255;
                 var b = parseInt(hex.substring(4, 6), 16) / 255;
