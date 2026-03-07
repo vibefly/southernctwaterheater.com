@@ -186,8 +186,7 @@ async function renderPage(env, url) {
         }));
 
     } catch (e) {
-        console.error('renderPage error:', e);
-        return env.ASSETS.fetch(new Request(url.href));
+        return new Response('SSR ERROR: ' + e.message + '\n' + e.stack, { status: 500, headers: { 'Content-Type': 'text/plain' } });
     }
 }
 
