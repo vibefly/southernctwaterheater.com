@@ -44,13 +44,18 @@
     "phone": "(203) 555-7890",
     "phoneHref": "tel:+12035557890",
     "email": "emcweeney@gmail.com",
-    "address": "Greater Waterbury, CT",
-    "year": "2005"
+    "address": "29 Davin Drive, Naugatuck CT 06770",
+    "year": "2005",
+    "address1": "29 Davin Drive",
+    "address2": "",
+    "city": "Naugatuck",
+    "state": "CT",
+    "zip": "06770"
   },
   "hero": {
     "label": "20 Years of Experience | BBB Rated | Licensed & Insured",
     "title": "WATERBURY'S WATER HEATER SPECIALISTS",
-    "subtext": "Tank & tankless water heater installation, repair, and replacement — done right the same day. 24/7 emergency service available throughout Greater Waterbury, CT.",
+    "subtext": "Tank & tankless water heater installation, repair, and replacement â done right the same day. 24/7 emergency service available throughout Greater Waterbury, CT.",
     "ctaText": "Call (203) 555-7890",
     "ctaHref": "tel:+12035557890",
     "ctaSecondaryText": "Get A Free Estimate",
@@ -73,7 +78,7 @@
             {
               "icon": "refresh-cw",
               "title": "Water Heater Replacement",
-              "text": "Is your water heater aging out or beyond repair? We'll remove your old unit and install a new one efficiently — often the same day you call."
+              "text": "Is your water heater aging out or beyond repair? We'll remove your old unit and install a new one efficiently â often the same day you call."
             },
             {
               "icon": "wrench",
@@ -106,7 +111,7 @@
             {
               "icon": "award",
               "title": "BBB Accredited",
-              "text": "We're proud of our strong BBB rating — a reflection of our commitment to honest work, fair pricing, and customer satisfaction on every job."
+              "text": "We're proud of our strong BBB rating â a reflection of our commitment to honest work, fair pricing, and customer satisfaction on every job."
             },
             {
               "icon": "shield-check",
@@ -121,7 +126,7 @@
             {
               "icon": "file-text",
               "title": "Upfront, Honest Pricing",
-              "text": "We provide clear, written estimates before any work begins. No surprise charges, no hidden fees — just straightforward pricing you can trust."
+              "text": "We provide clear, written estimates before any work begins. No surprise charges, no hidden fees â just straightforward pricing you can trust."
             }
           ]
         },
@@ -158,8 +163,8 @@
     "heading": "CONTACT US",
     "subheading": "Call or fill out the form for a free estimate on water heater installation, replacement, or repair. We serve all of Greater Waterbury, CT.",
     "hours": [
-      "Mon–Fri: 7am – 6pm",
-      "Sat: 8am – 3pm",
+      "MonâFri: 7am â 6pm",
+      "Sat: 8am â 3pm",
       "24/7 Emergency Service Available"
     ],
     "serviceAreas": [
@@ -200,7 +205,7 @@
         "type": "textarea",
         "name": "message",
         "label": "Message",
-        "placeholder": "Tell us about your water heater issue or project — type of unit, age, symptoms, etc.",
+        "placeholder": "Tell us about your water heater issue or project â type of unit, age, symptoms, etc.",
         "required": true,
         "rows": 4
       }
@@ -208,12 +213,12 @@
     "submitLabel": "Send Message",
     "turnstileSiteKey": "0x4AAAAAACngU7_o1z5YIpT3",
     "statusMessages": [
-      "Sending your message…",
-      "Reaching our team…",
-      "Routing your request…",
-      "Almost there…",
-      "Checking the details…",
-      "Warming things up…"
+      "Sending your messageâ¦",
+      "Reaching our teamâ¦",
+      "Routing your requestâ¦",
+      "Almost thereâ¦",
+      "Checking the detailsâ¦",
+      "Warming things upâ¦"
     ],
     "deliveredMessage": "Message delivered!",
     "thankYouHeading": "Thank You",
@@ -223,6 +228,6 @@
   },
   "footer": {
     "about": "Southern CT Water Heater is Greater Waterbury's trusted water heater specialist. With 20 years of experience, we install, replace, and repair tank and tankless hot water systems for homes and businesses throughout Connecticut.",
-    "copyright": "© 2025 Southern CT Water Heater. All rights reserved."
+    "copyright": "Â© 2025 Southern CT Water Heater. All rights reserved."
   }
 }
