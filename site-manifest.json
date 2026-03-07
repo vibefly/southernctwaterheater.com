@@ -1,0 +1,14 @@
+{
+  "editable_files": {
+    "htdocs/content.json": "All site content \u2014 business info, services, testimonials, contact, form messages",
+    "htdocs/styles.css": "All styles with CSS custom properties for theming"
+  },
+  "protected_files": [
+    "htdocs/index.html",
+    "htdocs/js/content-loader.js",
+    "htdocs/js/main.js",
+    "src/worker.js",
+    "src/sigv4.js",
+    ".gitignore"
+  ]
+}
