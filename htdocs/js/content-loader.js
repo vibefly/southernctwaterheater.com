@@ -23,10 +23,8 @@
         return;
     }
 
-    /* Non-SSR fallback (local dev / no Worker) */
-    var data;
-    try { data = await window.__CONTENT; } catch (e) { return; }
-    if (!data) return;
+    /* Non-SSR fallback (local dev / no Worker) — temporarily disabled */
+    return;
 
     var biz = data.business || {};
 
