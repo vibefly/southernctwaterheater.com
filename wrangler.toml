@@ -8,6 +8,7 @@ FROM_EMAIL = "noreply@vibefly.ai"
 [assets]
 directory = "./htdocs"
 binding = "ASSETS"
+run_worker_first = true
 
 [env.dev]
 name = "southernctwaterheater-com-dev"
