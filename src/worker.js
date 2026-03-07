@@ -179,7 +179,10 @@ async function renderPage(env, url) {
 
         return rewriter.transform(new Response(modifiedHtml, {
             status: 200,
-            headers: { 'Content-Type': 'text/html;charset=UTF-8' },
+            headers: {
+                'Content-Type': 'text/html;charset=UTF-8',
+                'Cache-Control': 'no-store',
+            },
         }));
 
     } catch (e) {
