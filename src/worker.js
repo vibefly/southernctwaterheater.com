@@ -6,10 +6,6 @@ export default {
             return handleSubmit(request, env);
         }
 
-        if (request.method === 'GET' && url.pathname === '/debug-worker') {
-            return new Response('worker running', { headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' } });
-        }
-
         if (request.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
             return renderPage(env, url);
         }
@@ -190,7 +186,8 @@ async function renderPage(env, url) {
         }));
 
     } catch (e) {
-        return new Response('SSR ERROR: ' + e.message + '\n' + e.stack, { status: 500, headers: { 'Content-Type': 'text/plain' } });
+        console.error('renderPage error:', e);
+        return env.ASSETS.fetch(new Request(url.href));
     }
 }
 
