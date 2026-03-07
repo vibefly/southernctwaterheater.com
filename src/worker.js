@@ -23,7 +23,8 @@ async function renderPage(env, url) {
 
         if (!htmlRes.ok || !contentRes.ok) return env.ASSETS.fetch(new Request(url.href));
 
-        const content = await contentRes.json();
+        const [html, content] = await Promise.all([htmlRes.text(), contentRes.json()]);
+
         const biz = content.business || {};
         const formCfg = content.form || {};
         if (!formCfg.thankYouSub && formCfg.thankYouSubtext) formCfg.thankYouSub = formCfg.thankYouSubtext;
@@ -38,7 +39,26 @@ async function renderPage(env, url) {
             return path.split('.').reduce((o, k) => (o != null ? o[k] : undefined), content);
         }
 
-        /* Pre-build HTML strings */
+        // ── Head: string replacement ──────────────────────────────────────────
+        const titleText = (content.meta && content.meta.title) || biz.name || '';
+        const description = (content.meta && content.meta.description) || '';
+        const canonical = url.origin + url.pathname;
+        const ogTags = [
+            `<meta property="og:type" content="website">`,
+            `<meta property="og:url" content="${escAttr(canonical)}">`,
+            `<meta property="og:title" content="${escAttr(titleText)}">`,
+            `<meta property="og:description" content="${escAttr(description)}">`,
+        ].join('\n');
+        const inlineScripts = `<script>window.__BUSINESS=${JSON.stringify(biz)};window.__FORM_CONFIG=${JSON.stringify(formCfg)};</script>`;
+
+        let modifiedHtml = html;
+        modifiedHtml = modifiedHtml.replace(/<title>[^<]*<\/title>/, `<title>${escHtml(titleText)}</title>`);
+        modifiedHtml = modifiedHtml.replace(/(<meta name="description" content=")[^"]*(")/,
+            `$1${escAttr(description)}$2`);
+        modifiedHtml = modifiedHtml.replace(/<script id="content-fetch">[\s\S]*?<\/script>\n?/, '');
+        modifiedHtml = modifiedHtml.replace('</head>', `${ogTags}\n${inlineScripts}\n</head>`);
+
+        // ── Body: HTMLRewriter ────────────────────────────────────────────────
         const navHtml = nav.map(item =>
             `<li><a class="nav-link" href="${escAttr(item.href || '#')}">${escHtml(item.label || '')}</a></li>`
         ).join('');
@@ -71,19 +91,6 @@ async function renderPage(env, url) {
             tsHtml = `<div id="cf-turnstile" data-sitekey="${escAttr(formCfg.turnstileSiteKey)}" data-theme="${tsTheme}"></div>`;
         }
 
-        const themeCss = buildThemeCss(content.theme);
-        const titleText = content.meta && content.meta.title ? content.meta.title : (biz.name || '');
-        const titleAttr = escAttr(titleText);
-        const description = escAttr((content.meta && content.meta.description) || '');
-        const canonical = escAttr(url.origin + url.pathname);
-        const ogTags = [
-            `<meta property="og:type" content="website">`,
-            `<meta property="og:url" content="${canonical}">`,
-            `<meta property="og:title" content="${titleAttr}">`,
-            `<meta property="og:description" content="${description}">`,
-        ].join('\n');
-        const inlineScripts = `<script>window.__BUSINESS=${JSON.stringify(biz)};window.__FORM_CONFIG=${JSON.stringify(formCfg)};</script>`;
-
         const serviceAreas = (content.contact && content.contact.serviceAreas) || [];
         const areasText = serviceAreas.join(', ');
         const areasListHtml = serviceAreas.map(a => `<li>${escHtml(a)}</li>`).join('');
@@ -97,20 +104,6 @@ async function renderPage(env, url) {
         ).join('') : '';
 
         const rewriter = new HTMLRewriter()
-            .on('title', {
-                element(el) { el.setInnerContent(escHtml(titleText)); }
-            })
-            .on('meta[name="description"]', {
-                element(el) {
-                    el.setAttribute('content', description);
-                    el.after(ogTags, { html: true });
-                }
-            })
-            .on('head', {
-                element(el) {
-                    el.append(inlineScripts, { html: true });
-                }
-            })
             .on('body', {
                 element(el) {
                     const cls = el.getAttribute('class') || '';
@@ -161,12 +154,8 @@ async function renderPage(env, url) {
             .on('#sections-container', {
                 element(el) { el.setInnerContent(sectionsHtml, { html: true }); }
             })
-            .on('.contact-form', {
-                comments(comment) {
-                    if (comment.text.includes('Fields injected')) {
-                        comment.replace(fieldsHtml + (tsHtml ? '\n' + tsHtml : ''), { html: true });
-                    }
-                }
+            .on('#form-fields-placeholder', {
+                element(el) { el.replace(fieldsHtml + (tsHtml ? '\n' + tsHtml : ''), { html: true }); }
             })
             .on('button[type="submit"]', {
                 element(el) {
@@ -186,17 +175,15 @@ async function renderPage(env, url) {
                 element(el) {
                     if (content.footer && content.footer.copyright) el.setInnerContent(content.footer.copyright);
                 }
-            })
-            .on('#content-fetch', {
-                element(el) { el.remove(); }
             });
 
-        return rewriter.transform(new Response(htmlRes.body, {
+        return rewriter.transform(new Response(modifiedHtml, {
             status: 200,
             headers: { 'Content-Type': 'text/html;charset=UTF-8' },
         }));
 
-    } catch {
+    } catch (e) {
+        console.error('renderPage error:', e);
         return env.ASSETS.fetch(new Request(url.href));
     }
 }
@@ -235,27 +222,6 @@ function renderSection(sec, idx) {
     }
 
     return `<section${idAttr} class="section section-visible${useAlt ? ' section--alt' : ''}"><div class="container"><div class="section__header">${headerHtml}</div>${gridHtml}</div></section>`;
-}
-
-function buildThemeCss(theme) {
-    if (!theme) return '';
-    const t = theme;
-    const vars = [];
-    if (t.bg)             { vars.push(`--color-bg:${t.bg}`, `--color-dark-bg:${t.bg}`); }
-    if (t.bgAlt)          { vars.push(`--color-bg-alt:${t.bgAlt}`, `--color-light-bg:${t.bgAlt}`); }
-    if (t.bgDark)           vars.push(`--color-bg-dark:${t.bgDark}`);
-    if (t.accentPrimary)  { vars.push(`--color-primary:${t.accentPrimary}`, `--color-accent-neon:${t.accentPrimary}`); }
-    if (t.accentSecondary){ vars.push(`--color-primary-dark:${t.accentSecondary}`, `--color-accent-blue:${t.accentSecondary}`); }
-    if (t.accentLight)      vars.push(`--color-primary-light:${t.accentLight}`);
-    if (t.textPrimary)    { vars.push(`--color-text:${t.textPrimary}`, `--color-text-primary:${t.textPrimary}`); }
-    if (t.textSecondary)  { vars.push(`--color-text-light:${t.textSecondary}`, `--color-text-secondary:${t.textSecondary}`); }
-    if (t.heroStart)        vars.push(`--color-hero-start:${t.heroStart}`);
-    if (t.heroMid)          vars.push(`--color-hero-mid:${t.heroMid}`);
-    if (t.heroEnd)          vars.push(`--color-hero-end:${t.heroEnd}`);
-    if (t.star)             vars.push(`--color-star:${t.star}`);
-    if (t.borderCard)       vars.push(`--color-border-card:${t.borderCard}`);
-    if (t.borderCardHover)  vars.push(`--color-border-card-hover:${t.borderCardHover}`);
-    return vars.join(';');
 }
 
 function computeTurnstileTheme(theme) {
