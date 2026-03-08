@@ -6,7 +6,11 @@ export default {
             return handleSubmit(request, env);
         }
 
-        if (request.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
+        if (request.method === 'GET') {
+            // Let known asset extensions pass through to static files
+            if (/\.(css|js|json|ico|png|jpg|jpeg|svg|webp|woff2?)$/i.test(url.pathname)) {
+                return env.ASSETS.fetch(request);
+            }
             return renderPage(env, url);
         }
 
@@ -30,7 +34,13 @@ async function renderPage(env, url) {
         if (!formCfg.thankYouSub && formCfg.thankYouSubtext) formCfg.thankYouSub = formCfg.thankYouSubtext;
         if (!formCfg.thankYouSubtext && formCfg.thankYouSub) formCfg.thankYouSubtext = formCfg.thankYouSub;
 
-        const sections = (content.pages && content.pages.home && content.pages.home.sections) || [];
+        // Resolve current page from URL slug
+        const slug = url.pathname.replace(/^\/+/, '').replace(/\/.*$/, '') || 'home';
+        const pageData = (content.pages && content.pages[slug]) || null;
+        if (!pageData && slug !== 'home') {
+            return new Response('Page not found', { status: 404 });
+        }
+        const sections = (pageData && pageData.sections) || [];
         const nav = Array.isArray(content.nav) ? content.nav : [];
         const phone = biz.phone || '';
         const phoneHref = biz.phoneHref || (phone ? `tel:${phone.replace(/\D/g, '')}` : '#');
@@ -40,8 +50,9 @@ async function renderPage(env, url) {
         }
 
         // ── Head: string replacement ──────────────────────────────────────────
-        const titleText = (content.meta && content.meta.title) || biz.name || '';
-        const description = (content.meta && content.meta.description) || '';
+        // Per-page title/description overrides site-level meta
+        const titleText = (pageData && pageData.title) || (content.meta && content.meta.title) || biz.name || '';
+        const description = (pageData && pageData.description) || (content.meta && content.meta.description) || '';
         const canonical = url.origin + url.pathname;
         const ogTags = [
             `<meta property="og:type" content="website">`,
