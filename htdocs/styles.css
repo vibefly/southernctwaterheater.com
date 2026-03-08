@@ -957,3 +957,65 @@ h4 { font-size: 1.1rem; }
         padding: 24px 16px;
     }
 }
+
+/* ==========================================================================
+   Ken Burns slideshow + image slots
+   ========================================================================== */
+
+.kb-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.kb-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  animation: kb-cycle calc(var(--kb-dur, 8s) * var(--n, 1))
+             calc(var(--kb-dur, 8s) * var(--i, 0))
+             linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes kb-cycle {
+  0%   { opacity: 0;   transform: scale(1.00); }
+  5%   { opacity: 1;   transform: scale(1.00); }
+  45%  { opacity: 1;   transform: scale(1.08); }
+  55%  { opacity: 0;   transform: scale(1.09); }
+  100% { opacity: 0;   transform: scale(1.00); }
+}
+
+.hero__overlay,
+.hero__content { position: relative; z-index: 1; }
+
+.site-gallery {
+  padding: 64px 0;
+  background: var(--color-bg-alt, #f4f4f4);
+}
+
+.site-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.site-gallery__item {
+  overflow: hidden;
+  border-radius: 6px;
+  aspect-ratio: 4/3;
+}
+
+.site-gallery__item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+.site-gallery__item:hover img {
+  transform: scale(1.06);
+}
