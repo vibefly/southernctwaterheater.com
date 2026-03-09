@@ -38,6 +38,8 @@
       }
       container.appendChild(slide);
     });
+
+    container.closest('.hero')?.classList.add('hero--has-bg');
   }
 
   /* ── Gallery: grid before footer ─────────────────────────────────── */
