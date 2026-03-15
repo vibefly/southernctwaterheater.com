@@ -18,7 +18,10 @@
             }
             renderTurnstile();
         }
-        if (window.lucide) try { lucide.createIcons(); } catch (e) {}
+        (function tryLucide() {
+            if (window.lucide) { try { lucide.createIcons(); } catch (e) {} }
+            else { setTimeout(tryLucide, 50); }
+        })();
         document.body.classList.add('content-loaded');
         return;
     }
