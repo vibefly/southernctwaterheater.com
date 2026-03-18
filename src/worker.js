@@ -251,6 +251,12 @@ async function renderPage(env, url) {
     </div>
 </footer>
 
+<div id="cookie-notice" class="cookie-notice" role="region" aria-label="Cookie notice">
+    <p>This site uses cookies for security and spam protection. <a href="/privacy">Learn more</a></p>
+    <button class="cookie-notice__btn" onclick="dismissCookieNotice()">OK</button>
+</div>
+<script>if(localStorage.getItem('cnd'))document.getElementById('cookie-notice').remove();function dismissCookieNotice(){localStorage.setItem('cnd','1');document.getElementById('cookie-notice').remove();}</script>
+
 </body>
 </html>`;
 
@@ -375,6 +381,12 @@ async function renderLegalPage(env, url) {
         </div>
     </div>
 </footer>
+
+<div id="cookie-notice" class="cookie-notice" role="region" aria-label="Cookie notice">
+    <p>This site uses cookies for security and spam protection. <a href="/privacy">Learn more</a></p>
+    <button class="cookie-notice__btn" onclick="dismissCookieNotice()">OK</button>
+</div>
+<script>if(localStorage.getItem('cnd'))document.getElementById('cookie-notice').remove();function dismissCookieNotice(){localStorage.setItem('cnd','1');document.getElementById('cookie-notice').remove();}</script>
 
 </body>
 </html>`;
