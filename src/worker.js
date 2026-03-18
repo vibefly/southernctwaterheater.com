@@ -22,14 +22,16 @@ export default {
 
 async function renderPage(env, url) {
     try {
-        const [htmlRes, contentRes] = await Promise.all([
-            env.ASSETS.fetch(new Request(url.href)),
-            env.ASSETS.fetch(new Request(new URL('/content.json', url).href)),
-        ]);
+        const contentRes = await env.ASSETS.fetch(new Request(new URL('/content.json', url).href));
+        if (!contentRes.ok) return new Response('Not found', { status: 404 });
 
-        if (!htmlRes.ok || !contentRes.ok) return env.ASSETS.fetch(new Request(url.href));
+        const content = await contentRes.json();
 
-        const [html, content] = await Promise.all([htmlRes.text(), contentRes.json()]);
+        let siteImages = [];
+        try {
+            const imagesRes = await env.ASSETS.fetch(new Request(new URL('/images.json', url).href));
+            if (imagesRes.ok) siteImages = await imagesRes.json();
+        } catch { /* no images yet */ }
 
         const biz = content.business || {};
         const formCfg = content.form || {};
@@ -47,43 +49,29 @@ async function renderPage(env, url) {
         const phone = biz.phone || '';
         const phoneHref = biz.phoneHref || (phone ? `tel:${phone.replace(/\D/g, '')}` : '#');
 
-        function resolve(path) {
-            return path.split('.').reduce((o, k) => (o != null ? o[k] : undefined), content);
-        }
-
-        // ── Head: string replacement ──────────────────────────────────────────
-        // Per-page title/description overrides site-level meta
         const titleText = (pageData && pageData.title) || (content.meta && content.meta.title) || biz.name || '';
         const description = (pageData && pageData.description) || (content.meta && content.meta.description) || '';
         const canonical = url.origin + url.pathname;
-        const ogTags = [
-            `<meta property="og:type" content="website">`,
-            `<meta property="og:url" content="${escAttr(canonical)}">`,
-            `<meta property="og:title" content="${escAttr(titleText)}">`,
-            `<meta property="og:description" content="${escAttr(description)}">`,
-        ].join('\n');
 
-        let siteImages = [];
-        try {
-            const imagesRes = await env.ASSETS.fetch(new Request(new URL('/images.json', url).href));
-            if (imagesRes.ok) siteImages = await imagesRes.json();
-        } catch { /* no images yet */ }
+        // ── Build content fragments ───────────────────────────────────────────
 
-        const inlineScripts = `<script>window.__BUSINESS=${JSON.stringify(biz)};window.__FORM_CONFIG=${JSON.stringify(formCfg)};window.__IMAGES=${JSON.stringify(siteImages)};</script>`;
-
-        let modifiedHtml = html;
-        modifiedHtml = modifiedHtml.replace(/<title>[^<]*<\/title>/, `<title>${escHtml(titleText)}</title>`);
-        modifiedHtml = modifiedHtml.replace(/(<meta name="description" content=")[^"]*(")/,
-            `$1${escAttr(description)}$2`);
-        modifiedHtml = modifiedHtml.replace(/<script id="content-fetch">[\s\S]*?<\/script>\n?/, '');
-        modifiedHtml = modifiedHtml.replace('</head>', `${ogTags}\n${inlineScripts}\n</head>`);
-
-        // ── Body: HTMLRewriter ────────────────────────────────────────────────
         const navHtml = nav.map(item =>
             `<li><a class="nav-link" href="${escAttr(item.href || '#')}">${escHtml(item.label || '')}</a></li>`
         ).join('');
 
         const sectionsHtml = sections.map((sec, idx) => renderSection(sec, idx)).join('\n');
+
+        const serviceAreas = (content.contact && content.contact.serviceAreas) || [];
+        const areasText = serviceAreas.join(', ');
+        const areasListHtml = serviceAreas.map(a => `<li>${escHtml(a)}</li>`).join('');
+
+        const hours = (content.contact && content.contact.hours) || [];
+        const hoursHtml = `<strong>Hours</strong>${hours.map(h => `<span>${escHtml(h)}</span>`).join('')}`;
+
+        const footerSvc = sections.find(s => s.items && s.items.length > 0 && !s.items[0].quote);
+        const footerSvcHtml = footerSvc ? footerSvc.items.map(item =>
+            `<li><a href="#${escAttr(footerSvc.id || 'services')}">${escHtml(item.title || '')}</a></li>`
+        ).join('') : '';
 
         let fieldsHtml = '';
         if (formCfg.fields) {
@@ -111,103 +99,162 @@ async function renderPage(env, url) {
             tsHtml = `<div class="cf-turnstile" data-sitekey="${escAttr(formCfg.turnstileSiteKey)}" data-theme="${tsTheme}"></div>`;
         }
 
-        const serviceAreas = (content.contact && content.contact.serviceAreas) || [];
-        const areasText = serviceAreas.join(', ');
-        const areasListHtml = serviceAreas.map(a => `<li>${escHtml(a)}</li>`).join('');
+        const ogTags = [
+            `<meta property="og:type" content="website">`,
+            `<meta property="og:url" content="${escAttr(canonical)}">`,
+            `<meta property="og:title" content="${escAttr(titleText)}">`,
+            `<meta property="og:description" content="${escAttr(description)}">`,
+        ].join('\n');
 
-        const hours = (content.contact && content.contact.hours) || [];
-        const hoursHtml = `<strong>Hours</strong>${hours.map(h => `<span>${escHtml(h)}</span>`).join('')}`;
+        const inlineScripts = `<script>window.__BUSINESS=${JSON.stringify(biz)};window.__FORM_CONFIG=${JSON.stringify(formCfg)};window.__IMAGES=${JSON.stringify(siteImages)};</script>`;
 
-        const footerSvc = sections.find(s => s.items && s.items.length > 0 && !s.items[0].quote);
-        const footerSvcHtml = footerSvc ? footerSvc.items.map(item =>
-            `<li><a href="#${escAttr(footerSvc.id || 'services')}">${escHtml(item.title || '')}</a></li>`
-        ).join('') : '';
+        const phoneSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
 
-        const rewriter = new HTMLRewriter()
-            .on('body', {
-                element(el) {
-                    const cls = el.getAttribute('class') || '';
-                    el.setAttribute('class', (cls + ' content-loaded').trim());
-                }
-            })
-            .on('[data-content]', {
-                element(el) {
-                    const val = resolve(el.getAttribute('data-content'));
-                    if (val != null) el.setInnerContent(String(val));
-                }
-            })
-            .on('[data-content-attr-href]', {
-                element(el) {
-                    const val = resolve(el.getAttribute('data-content-attr-href'));
-                    if (val) el.setAttribute('href', String(val));
-                }
-            })
-            .on('[data-content-nav]', {
-                element(el) { el.setInnerContent(navHtml, { html: true }); }
-            })
-            .on('[data-content-phone]', {
-                element(el) {
-                    el.setInnerContent(phone);
-                    if (el.tagName === 'a') el.setAttribute('href', phoneHref);
-                }
-            })
-            .on('[data-phone-href]', {
-                element(el) {
-                    if (el.tagName === 'a') el.setAttribute('href', phoneHref);
-                }
-            })
-            .on('[data-content-email]', {
-                element(el) {
-                    el.setInnerContent(biz.email || '');
-                    if (el.tagName === 'a' && biz.email) el.setAttribute('href', `mailto:${biz.email}`);
-                }
-            })
-            .on('[data-content-list="contact.hours"]', {
-                element(el) { el.setInnerContent(hoursHtml, { html: true }); }
-            })
-            .on('[data-content-areas-text]', {
-                element(el) { el.setInnerContent(areasText); }
-            })
-            .on('[data-content-areas-list]', {
-                element(el) { el.setInnerContent(areasListHtml, { html: true }); }
-            })
-            .on('#sections-container', {
-                element(el) { el.setInnerContent(sectionsHtml, { html: true }); }
-            })
-            .on('#form-fields-placeholder', {
-                element(el) { el.replace(fieldsHtml + (tsHtml ? '\n' + tsHtml : ''), { html: true }); }
-            })
-            .on('button[type="submit"]', {
-                element(el) {
-                    if (formCfg.submitLabel) el.setInnerContent(formCfg.submitLabel);
-                }
-            })
-            .on('[data-content-footer-services]', {
-                element(el) { el.setInnerContent(footerSvcHtml, { html: true }); }
-            })
-            .on('[data-content-footer-credit]', {
-                element(el) {
-                    if (content.footer && content.footer.creditName) el.setInnerContent(content.footer.creditName);
-                    if (content.footer && content.footer.creditUrl) el.setAttribute('href', content.footer.creditUrl);
-                }
-            })
-            .on('[data-content-copyright]', {
-                element(el) {
-                    if (content.footer && content.footer.copyright) el.setInnerContent(content.footer.copyright);
-                }
-            });
+        const hero = content.hero || {};
+        const contact = content.contact || {};
+        const footer = content.footer || {};
+        const submitLabel = escHtml(formCfg.submitLabel || 'Send Message');
+        const ctaSecondary = escHtml(hero.ctaSecondaryText || 'Get A Quote');
 
-        return rewriter.transform(new Response(modifiedHtml, {
+        // ── Build complete HTML ───────────────────────────────────────────────
+
+        const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escHtml(titleText)}</title>
+    <meta name="description" content="${escAttr(description)}">
+    ${ogTags}
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    ${inlineScripts}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+    <script src="js/lucide.min.js" defer onload="lucide.createIcons()"></script>
+    <script src="js/images.js" defer></script>
+    <script src="js/content-loader.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <style>body{opacity:0}body.content-loaded{opacity:1;transition:opacity .15s}</style>
+    <noscript><style>body{opacity:1}</style></noscript>
+</head>
+<body class="content-loaded">
+
+<header id="main-header">
+    <div class="header__inner">
+        <a href="/" class="logo">${escHtml(biz.name || '')}</a>
+        <a href="${escAttr(phoneHref)}" class="header__phone">
+            ${phoneSvg}
+            <span>${escHtml(phone)}</span>
+        </a>
+        <nav id="main-nav">
+            <ul>${navHtml}</ul>
+        </nav>
+        <a href="#contact" class="btn btn--primary header__cta">${ctaSecondary}</a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+<section id="hero" class="hero" data-section="hero">
+    <div id="hero-images-slot" class="kb-container"></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+        <p class="eyebrow">${escHtml(hero.label || '')}</p>
+        <h1>${escHtml(hero.title || '')}</h1>
+        <p class="lead">${escHtml(hero.subtext || '')}</p>
+        <a href="${escAttr(phoneHref)}" class="hero__phone">${escHtml(phone)}</a>
+        <div class="hero__actions">
+            <a class="btn btn--primary btn--lg" href="${escAttr(phoneHref)}">${escHtml(hero.ctaText || 'Call Now')}</a>
+            <a class="btn btn--outline btn--lg" href="#contact">${ctaSecondary}</a>
+        </div>
+    </div>
+</section>
+
+<div id="sections-container">${sectionsHtml}</div>
+
+<section id="contact" class="section section--alt" data-section="contact">
+    <div class="container">
+        <div class="section__header">
+            <h2>${escHtml(contact.heading || 'Contact Us')}</h2>
+            <p>${escHtml(contact.subheading || '')}</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="contact-info__item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <div>
+                        <strong>Phone</strong>
+                        <a href="${escAttr(phoneHref)}">${escHtml(phone)}</a>
+                    </div>
+                </div>
+                <div class="contact-info__item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    <div>${hoursHtml}</div>
+                </div>
+                <div class="contact-info__item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <div>
+                        <strong>Service Area</strong>
+                        <span>${escHtml(areasText)}</span>
+                    </div>
+                </div>
+            </div>
+            <form class="contact-form" action="/api/submit" method="POST">
+                <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
+                ${fieldsHtml}
+                ${tsHtml}
+                <button type="submit" class="btn btn--primary btn--full">${submitLabel}</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer__about">
+                <h4>${escHtml(biz.name || '')}</h4>
+                <p>${escHtml(footer.about || '')}</p>
+                <a href="${escAttr(phoneHref)}" class="footer__phone">${escHtml(phone)}</a>
+            </div>
+            <div class="footer__services">
+                <h4>Services</h4>
+                <ul>${footerSvcHtml}</ul>
+            </div>
+            <div class="footer__areas">
+                <h4>Service Area</h4>
+                <ul>${areasListHtml}</ul>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>${escHtml(footer.copyright || '')}</p>
+            <div class="footer__links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms-of-service.html">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>`;
+
+        return new Response(html, {
             status: 200,
             headers: {
                 'Content-Type': 'text/html;charset=UTF-8',
                 'Cache-Control': 'no-store',
             },
-        }));
+        });
 
     } catch (e) {
         console.error('renderPage error:', e);
-        return env.ASSETS.fetch(new Request(url.href));
+        return new Response('Internal server error', { status: 500 });
     }
 }
 
