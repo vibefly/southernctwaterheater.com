@@ -1028,3 +1028,44 @@ h4 { font-size: 1.1rem; }
 .site-gallery__item:hover img {
   transform: scale(1.06);
 }
+
+/* ---------- Legal Pages ---------- */
+.legal-page {
+    padding: 6rem 0 4rem;
+    min-height: 60vh;
+}
+
+.legal-page h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-bottom: 0.5rem;
+}
+
+.legal-page__date {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.legal-page__intro {
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.1));
+}
+
+.legal-section {
+    margin-bottom: 2rem;
+}
+
+.legal-section h2 {
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+}
+
+.legal-section p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+}
