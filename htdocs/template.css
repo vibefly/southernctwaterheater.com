@@ -585,9 +585,9 @@ h4 { font-size: 1.1rem; }
     margin-top: 4px;
 }
 
-.contact-form input:focus,
-.contact-form select:focus,
-.contact-form textarea:focus {
+.contact-form input:focus-visible,
+.contact-form select:focus-visible,
+.contact-form textarea:focus-visible {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.15);
@@ -1068,4 +1068,31 @@ h4 { font-size: 1.1rem; }
     color: var(--color-text-secondary);
     line-height: 1.7;
     margin-bottom: 0.75rem;
+}
+
+/* === WCAG 2.1 AA — Accessibility === */
+
+/* Skip navigation link — hidden until focused by keyboard */
+.skip-nav {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.5rem 1.25rem;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 10000;
+    border-radius: 0 0 4px 4px;
+    text-decoration: none;
+}
+.skip-nav:focus {
+    top: 0;
+}
+
+/* Global keyboard focus indicator — only shown when navigating by keyboard */
+*:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    border-radius: 2px;
 }

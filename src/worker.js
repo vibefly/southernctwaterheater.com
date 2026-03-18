@@ -81,6 +81,8 @@ async function renderPage(env, url) {
             fieldsHtml = formCfg.fields.map(field => {
                 const id = `contact-${field.name}`;
                 const req = field.required ? ' required' : '';
+                const autocompleteMap = { name: 'name', email: 'email', phone: 'tel', company: 'organization' };
+                const ac = autocompleteMap[field.name] ? ` autocomplete="${autocompleteMap[field.name]}"` : '';
                 let inputHtml;
                 if (field.type === 'textarea') {
                     inputHtml = `<textarea id="${id}" name="${escAttr(field.name)}" rows="${field.rows || 4}" placeholder="${escAttr(field.placeholder || '')}"${req}></textarea>`;
@@ -90,7 +92,7 @@ async function renderPage(env, url) {
                     ).join('');
                     inputHtml = `<select id="${id}" name="${escAttr(field.name)}"${req}><option value="">${escHtml(field.placeholder || 'Select\u2026')}</option>${opts}</select>`;
                 } else {
-                    inputHtml = `<input type="${escAttr(field.type || 'text')}" id="${id}" name="${escAttr(field.name)}" placeholder="${escAttr(field.placeholder || '')}"${req}>`;
+                    inputHtml = `<input type="${escAttr(field.type || 'text')}" id="${id}" name="${escAttr(field.name)}" placeholder="${escAttr(field.placeholder || '')}"${req}${ac}>`;
                 }
                 return `<label for="${id}">${escHtml(field.label || '')}</label>${inputHtml}`;
             }).join('\n');
@@ -143,24 +145,28 @@ async function renderPage(env, url) {
 </head>
 <body class="content-loaded">
 
+<a class="skip-nav" href="#main-content">Skip to main content</a>
+
 <header id="main-header">
     <div class="header__inner">
         <a href="/" class="logo">${escHtml(biz.name || '')}</a>
-        <a href="${escAttr(phoneHref)}" class="header__phone">
+        <a href="${escAttr(phoneHref)}" class="header__phone" aria-label="Call ${escAttr(phone)}">
             ${phoneSvg}
-            <span>${escHtml(phone)}</span>
+            <span aria-hidden="true">${escHtml(phone)}</span>
         </a>
-        <nav id="main-nav">
+        <nav id="main-nav" aria-label="Main navigation">
             <ul>${navHtml}</ul>
         </nav>
         <a href="#contact" class="btn btn--primary header__cta">${ctaSecondary}</a>
-        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
         </button>
     </div>
 </header>
+
+<main id="main-content">
 
 <section id="hero" class="hero" data-section="hero">
     <div id="hero-images-slot" class="kb-container"></div>
@@ -188,18 +194,18 @@ async function renderPage(env, url) {
         <div class="contact-grid">
             <div class="contact-info">
                 <div class="contact-info__item">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     <div>
                         <strong>Phone</strong>
                         <a href="${escAttr(phoneHref)}">${escHtml(phone)}</a>
                     </div>
                 </div>
                 <div class="contact-info__item">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                     <div>${hoursHtml}</div>
                 </div>
                 <div class="contact-info__item">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     <div>
                         <strong>Service Area</strong>
                         <span>${escHtml(areasText)}</span>
@@ -215,6 +221,8 @@ async function renderPage(env, url) {
         </div>
     </div>
 </section>
+
+</main>
 
 <footer class="site-footer">
     <div class="container">
@@ -317,26 +325,28 @@ async function renderLegalPage(env, url) {
 </head>
 <body class="content-loaded">
 
+<a class="skip-nav" href="#main-content">Skip to main content</a>
+
 <header id="main-header">
     <div class="header__inner">
         <a href="/" class="logo">${escHtml(biz.name || '')}</a>
-        <a href="${escAttr(phoneHref)}" class="header__phone">
+        <a href="${escAttr(phoneHref)}" class="header__phone" aria-label="Call ${escAttr(phone)}">
             ${phoneSvg}
-            <span>${escHtml(phone)}</span>
+            <span aria-hidden="true">${escHtml(phone)}</span>
         </a>
-        <nav id="main-nav">
+        <nav id="main-nav" aria-label="Main navigation">
             <ul>${navHtml}</ul>
         </nav>
         <a href="/#contact" class="btn btn--primary header__cta">${ctaSecondary}</a>
-        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
         </button>
     </div>
 </header>
 
-<main class="legal-page">
+<main id="main-content" class="legal-page">
     <div class="container">
         <h1>${escHtml(heading)}</h1>
         ${effectiveDate ? `<p class="legal-page__date">Effective date: ${escHtml(effectiveDate)}</p>` : ''}
@@ -426,10 +436,11 @@ function renderSection(sec, idx) {
     if (sec.items && sec.items.length > 0) {
         if (isTestimonial) {
             const cards = sec.items.map(item => {
-                const stars = Array(item.stars || 5).fill(
-                    `<svg width="20" height="20" viewBox="0 0 20 20" fill="var(--color-star)"><path d="M10 1l2.5 5.5H18l-4.5 3.5 1.5 5.5L10 13l-5 2.5 1.5-5.5L2 6.5h5.5z"/></svg>`
+                const starCount = item.stars || 5;
+                const stars = Array(starCount).fill(
+                    `<svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="var(--color-star)"><path d="M10 1l2.5 5.5H18l-4.5 3.5 1.5 5.5L10 13l-5 2.5 1.5-5.5L2 6.5h5.5z"/></svg>`
                 ).join('');
-                return `<div class="testimonial-card"><div class="testimonial-card__stars">${stars}</div><blockquote class="testimonial-card__quote">${escHtml(item.quote || '')}</blockquote><div class="testimonial-card__author"><strong>${escHtml(item.author || '')}</strong><span>${escHtml(item.role || '')}</span></div></div>`;
+                return `<div class="testimonial-card"><div class="testimonial-card__stars" aria-label="${starCount} out of 5 stars">${stars}</div><blockquote class="testimonial-card__quote">${escHtml(item.quote || '')}</blockquote><div class="testimonial-card__author"><strong>${escHtml(item.author || '')}</strong><span>${escHtml(item.role || '')}</span></div></div>`;
             }).join('');
             gridHtml = `<div class="testimonials-grid">${cards}</div>`;
         } else {
