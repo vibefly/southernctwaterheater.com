@@ -1,4 +1,4 @@
-import { escHtml, escAttr, handleSubmit, computeTurnstileTheme } from './worker-utils.js';
+import { escHtml, escAttr, handleSubmit, computeTurnstileTheme, htmlResponse } from './worker-utils.js';
 
 export default {
     async fetch(request, env) {
@@ -260,13 +260,7 @@ async function renderPage(env, url) {
 </body>
 </html>`;
 
-        return new Response(html, {
-            status: 200,
-            headers: {
-                'Content-Type': 'text/html;charset=UTF-8',
-                'Cache-Control': 'no-store',
-            },
-        });
+        return htmlResponse(html);
 
     } catch (e) {
         console.error('renderPage error:', e);
@@ -391,10 +385,7 @@ async function renderLegalPage(env, url) {
 </body>
 </html>`;
 
-        return new Response(html, {
-            status: 200,
-            headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'no-store' },
-        });
+        return htmlResponse(html);
     } catch (e) {
         console.error('renderLegalPage error:', e);
         return new Response('Internal server error', { status: 500 });
